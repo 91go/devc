@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  dns:
+    image: coredns/coredns
+    restart: on-failure
+    ports:
+      - 1053:1053
+      - 1053:1053/udp
+    volumes:
+      - ./Corefile:/Corefile
+
+# test.sh
+# dig @127.0.0.1 -p 1053 www.example.com

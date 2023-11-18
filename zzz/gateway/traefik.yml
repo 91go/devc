@@ -1,0 +1,25 @@
+version: '3'
+services:
+  me_traefik:
+    restart: always
+    image: traefik:1.7.4
+    ports:
+      - '80:80'
+      - '443:443'
+    labels:
+      - 'traefik.backend=me_traefik'
+      - 'traefik.frontend.rule=Host:traefik.testdomain.com'
+      - 'traefik.enable=true'
+      - 'traefik.passHostHeader=true'
+      - 'traefik.protocol=https'
+      - 'traefik.port=8090'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
+    networks:
+      - webgateway
+networks:
+  webgateway:
+    external:
+      name: me_gateway

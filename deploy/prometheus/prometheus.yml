@@ -1,0 +1,115 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+  external_labels:
+    monitor: 'my-monitor'
+
+# 指定alertmanager报警组件地址
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: [$MANAGER_IP$] # localhost:9093
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: $LABEL$ # my-monitor
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - $RULE_FILES$ # rules.yml
+
+# A scrape configuration containing exactly one endpoint to scrape.
+scrape_configs:
+  - job_name: 'nodeexporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['nodeexporter:9100']
+        #   scheme: http
+        #    tls_config:
+        #       insecure_skip_verify: false
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  # 监控prometheus服务
+  - job_name: 'prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'pushgateway'
+    scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets: ['pushgateway:9091']
+
+  # 我们自己的商城项目配置
+  - job_name: 'mall'
+    static_configs:
+      # 目标的采集地址
+      - targets: [ 'golang:9080' ]
+        labels:
+          # 自定义标签
+          app: 'user-api'
+          env: 'test'
+
+      - targets: [ 'golang:9090' ]
+        labels:
+          app: 'user-rpc'
+          env: 'test'
+
+      - targets: [ 'golang:9081' ]
+        labels:
+          app: 'product-api'
+          env: 'test'
+
+      - targets: [ 'golang:9091' ]
+        labels:
+          app: 'product-rpc'
+          env: 'test'
+
+      - targets: [ 'golang:9082' ]
+        labels:
+          app: 'order-api'
+          env: 'test'
+
+      - targets: [ 'golang:9092' ]
+        labels:
+          app: 'order-rpc'
+          env: 'test'
+
+      - targets: [ 'golang:9083' ]
+        labels:
+          app: 'pay-api'
+          env: 'test'
+
+      - targets: [ 'golang:9093' ]
+        labels:
+          app: 'pay-rpc'
+          env: 'test'
+
+
+
+
+
+#alerting:
+#  alertmanagers:
+#    - scheme: http
+#      static_configs:
+#        - targets:
+#            - 'alertmanager:9093'
+
+#  - job_name: 'nginx'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['nginxexporter:9113']
+
+#  - job_name: 'aspnetcore'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['eventlog-proxy:5000', 'eventlog:5000']

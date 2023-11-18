@@ -1,0 +1,46 @@
+version: "2"
+services:
+  # drone服务端
+  drone-server:
+    image: drone/drone:latest
+    ports:
+      - 8000:80
+#      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/drone:/data
+    restart: always
+    environment:
+      - DRONE_OPEN=false
+#      - DRONE_ORGS=dolores,dogpatch,ServiceDeployed
+      - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}
+      - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}
+      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
+      - DRONE_TLS_AUTOCERT=false
+      - DRONE_RUNNER_CAPACITY=8
+      - DRONE_DEBUG=false
+      - DRONE_LOGS_DEBUG=false
+      - DRONE_GIT_ALWAYS_AUTH=false
+      - DRONE_SECRET_SECRET=${DRONE_GITHUB_SECRET}
+      - DRONE_SECRET=${DRONE_SECRET}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}  # 这个是自己生成的 secret，教程中也有案例。
+
+  # drone客户端
+  drone-agent:
+    image: drone/agent:latest
+    container_name: drone-runner
+    command: agent
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_SERVER=drone-server:9000
+      - DRONE_SECRET=${DRONE_SECRET}
+      - DRONE_RPC_PROTO=${DRONE_SERVER_PROTO}
+      - DRONE_RPC_HOST=${DRONE_RPC_HOST}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}  # 此处要与上面的rpc secret一致
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_LOGS_TRACE=true

@@ -1,0 +1,17 @@
+# Corefile
+# coredns的配置文件
+
+:1053 {
+  hosts {
+  10.0.0.1 www.example.com
+  10.0.0.2 www.example.com
+  10.0.0.3 www.example.com
+  fallthrough
+}
+  forward . 8.8.8.8:53
+  errors
+  log
+
+  # reload server when config change.
+  reload 5s
+}
