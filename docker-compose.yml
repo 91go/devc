@@ -65,8 +65,7 @@ services:
     restart: always
 
   dtm:
-    build:
-      context: deploy/dtm
+    image: yedf/dtm
     environment:
       - TZ=${TZ}
     entrypoint:
@@ -122,7 +121,7 @@ services:
   redis:
     image: redis:7.0
     volumes:
-      - ./deploy/redis/conf:/usr/local/etc/redis  # redis配置文件
+      - ./deploy/redis:/usr/local/etc/redis  # redis配置文件
       - ${DATA_PATH_HOST}/redis:/data
 #      - ./deploy/data/redis/data:/redis/data  # redis数据
 #      - ./deploy/data/redis/logs:/logs  # redis日志文件
