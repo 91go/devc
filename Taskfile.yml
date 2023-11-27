@@ -74,3 +74,23 @@
     release:
       cmds:
         - goreleaser release --clean -p 4
+
+    api-gen:
+      cmds:
+        - goctl api go -api *.api -dir . --style=goZero
+
+    rpc-gen:
+      cmds:
+        - goctl rpc protoc *.proto --go_out=../ --go-rpc_out=../ -zrpc_out=../ --style=goZero
+
+    mysql-gen:
+      cmds:
+        - goctl model mysql datasource -url="$USERNAME:$PASSWD@tcp($HOST:$PORT)/$DBNAME" -table={{.CLI_ARGS}}  -dir="$MODELDIR" -cache=true --style=goZero
+      env:
+        MODELDIR: ./genModel
+        HOST: 127.0.0.1
+        PORT: 3306
+        DBNAME: TEST
+        USERNAME: root
+        PASSWD:
+
