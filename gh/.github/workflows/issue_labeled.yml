@@ -1,0 +1,74 @@
+name: Issue Labeled
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  create-comment-issue-duplicate:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'duplicate'
+    steps:
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello @${{ github.event.issue.user.login }}, your issue is a duplicate and will be closed.
+            你好 @${{ github.event.issue.user.login }}，你的issue是重复的，将被关闭。
+      - name: Close issue
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+  create-comment-issue-invalid:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'invalid'
+    steps:
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello @${{ github.event.issue.user.login }}, your issue is invalid and will be closed.
+            你好 @${{ github.event.issue.user.login }}，你的issue无效，将被关闭。
+      - name: Close issue
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+  create-comment-issue-question:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'question'
+    steps:
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3.3.3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello @${{ github.event.issue.user.login }}, please input issue by template and add detail. Issues labeled by `question` will be closed if no activities in 7 days.
+            你好 @${{ github.event.issue.user.login }}，请按照issue模板填写, 并详细说明问题/复现步骤/复现链接/实现思路或提供更多信息等, 7天内未回复issue自动关闭。
+  lock-issue-wontfix:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'wontfix'
+    steps:
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello @${{ github.event.issue.user.login }}, this issue will not be worked on and will be closed.
+            你好 @${{ github.event.issue.user.login }}，这不会被处理，将被关闭。
+      - name: Close issue
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}

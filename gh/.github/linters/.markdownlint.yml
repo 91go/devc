@@ -1,0 +1,47 @@
+# markdownlint -f -c .github/linters/.markdownlint.yml .
+code_blocks: false
+# 将 focusMode 设为 true 后，插件就不会检查光标所在的当前行
+focusMode: true
+MD004: false
+# 无序列表缩紧
+# 默认把所有tab转化为space，因为puml强制使用tab而非space缩进，所以改为false
+MD007: false
+# 硬标签
+MD010: false
+# 多个连续的空白行，不应出现一行以上的空行（规则没毛病，但是不适用）
+MD012: false
+# 每行字符数，默认一行最长80个字符
+MD013: false
+#  header不能重复: 设置为siblings_only同级header不能重复
+MD024:
+  siblings_only: true
+# 同一文档中具有多个一级header
+MD025: false
+# 有序列表默认从1开始
+MD029: true
+# 每当markdown文档中使用原始HTML时，都会触发此规则。需要使用md，而非html代码。
+MD033: false
+# MD043: false
+# 某行如果emphasis的话，应该设置为标题
+MD036: false
+# 第一行应该是一级header
+MD041: false
+# 专业名字应有正确的大小写，需要自定义指定专业名字
+MD044: false
+# MD044:
+#  names:
+#    - CommonMark
+#    - Ctrl
+#    - JavaScript
+#    - markdown
+#    - markdown-it
+#    - markdownlint
+#    - Node.js
+#    - Shift
+#    - Visual Studio Code
+#    - golang
+# 文件结尾应该有一行空行
+MD047: false
+# 文档内跳转，找不到对应的toc会触发该规则（但是偶尔会抽风，所以加上该规则）
+# [markdownlint/md051.md · DavidAnson/markdownlint](https://github.com/DavidAnson/markdownlint/blob/main/doc/md051.md)
+MD051: false

@@ -71,9 +71,31 @@
         - task: fmt
         - golangci-lint run --timeout 5m
 
+    benchstat:
+      desc: 通过benchstat对比测试数据
+      cmds:
+        - go test -run=NONE -benchmem -bench=Rss -count=20 | tee -a xxx.txt
+        - benchstat old.txt new.txt
+
+    race:
+      desc: Run data race detector
+      cmds:
+        - go test -race -short
+
     release:
       cmds:
         - goreleaser release --clean -p 4
+
+    cross-build:
+      desc: 交叉编译
+      cmds:
+#        - CGO_ENABLED=1 GOOS=linux GOARCH=amd64 @go build -a -o ./build/$(BINARY) -v ./
+
+    test-cover:
+      cmds:
+        - go test `go list ./... | grep -v examples` -coverprofile=coverage.out -covermode=atomic
+        - go tool cover -html=coverage.out
+
 
     api-gen:
       cmds:

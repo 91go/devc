@@ -1,0 +1,57 @@
+name: Linters
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+  schedule:
+    - cron: "0 9 * * 6"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Linters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: github/super-linter@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          LINTER_RULES_PATH: .github/linters
+          # markdownlint
+          VALIDATE_MARKDOWN: true # 开启md检测
+          MARKDOWN_CONFIG_FILE: .markdownlint.yml
+          # yamllint
+          VALIDATE_YAML: true
+          YAML_CONFIG_FILE: .yamllint.yml
+          YAML_ERROR_ON_WARNING: true
+          # ghac
+          VALIDATE_GITHUB_ACTIONS: true
+#          GITHUB_ACTIONS_CONFIG_FILE: .actionlint.yml
+          # go
+          VALIDATE_GO: true
+          # gitleaks
+          VALIDATE_GITLEAKS: true
+          GITLEAKS_CONFIG_FILE: .gitleaks.toml
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
+  commitlint2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm install @commitlint/config-conventional
+      - uses: JulienKode/pull-request-name-linter-action@v0.5.0

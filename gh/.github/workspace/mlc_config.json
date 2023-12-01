@@ -1,0 +1,36 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://www.ruanyifeng.com/"
+    },
+    {
+      "pattern": "^https://leetcode-cn.com/"
+    },
+    {
+      "pattern": "^https://www.kancloud.cn/"
+    },
+    {
+      "pattern": "^https://github.com/codersway/.*"
+    },
+    {
+      "pattern": "^https://github.com/hapihacking/docs/.*"
+    },
+    {
+      "pattern": "^https://www.yuque.com/.*"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "/github/workspace/"
+    }
+  ],
+  "aliveStatusCodes": [
+    200,
+    206,
+    401,
+    429,
+    521,
+    0
+  ]
+}

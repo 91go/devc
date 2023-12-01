@@ -1,0 +1,23 @@
+name: Check Markdown links
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 9 * * 6"
+jobs:
+  check-links:
+    name: Broken Links
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file-extension: [.md, .markdown, .yml, .html]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'  # 只展示错误链接
+          use-verbose-mode: 'yes'  # 展示状态码
+          config-file: '.github/workspace/mlc_config.json'
+          file-extension: ${{ matrix.file-extension }}

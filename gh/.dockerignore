@@ -1,0 +1,13 @@
+# 项目通用
+# docker打包时需要忽略的文件
+.editorconfig
+.git
+AUTHORS.md
+CONTRIBUTING.md
+LICENSE
+Makefile
+NOTICE
+README.md
+arm/
+powerpc/
+mips/

@@ -1,0 +1,46 @@
+name: Check Issues And Close
+
+on:
+  schedule:
+    - cron: "0 0 */7 * *"
+  workflow_dispatch:
+
+jobs:
+  check-inactive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check-inactive
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'check-inactive'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          inactive-day: 30
+          body: Hello, this issue has been inactive for more than 30 days and will be closed if inactive for another 30 days.
+  close-inactive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: close-issues
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: 'inactive'
+          inactive-day: 30
+          close-reason: 'not_planned'
+          body: |
+            Hello @${{ github.event.issue.user.login }}, this issue was closed due to inactive more than 60 days. You can reopen or recreate it if you think it should continue.
+  close-need-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: close-issues
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: 'question'
+          inactive-day: 7
+          close-reason: 'not_planned'
+          body: |
+            Hello @${{ github.event.issue.user.login }}, this issue was closed due to no activities in 7 days.
+            你好 @${{ github.event.issue.user.login }}，此issue因超过7天未回复被关闭。
+
