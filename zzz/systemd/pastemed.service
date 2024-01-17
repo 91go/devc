@@ -1,0 +1,13 @@
+[Unit]
+Description=PasteMe API Server Service
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/pastemed/pastemed -c /etc/pastemed/config.json
+
+[Install]
+WantedBy=multi-user.target
